@@ -1,0 +1,28 @@
+#!/bin/bash
+# 反復 (Hanpuku) - Japanese Spaced Repetition System
+
+# Get the directory where this app bundle is located
+APP_DIR="$(dirname "$(dirname "$(dirname "$0")")")"
+SRS_DIR="$(dirname "$APP_DIR")"
+
+# If the app is inside the SRS folder, use that
+if [ -f "$SRS_DIR/src/main.py" ]; then
+    cd "$SRS_DIR/src"
+    PYTHON="../venv/bin/python"
+elif [ -f "/Users/broganbunt/python_work/SRS/src/main.py" ]; then
+    # Fallback to the original location
+    cd "/Users/broganbunt/python_work/SRS/src"
+    PYTHON="../venv/bin/python"
+else
+    echo "Error: Could not find SRS application directory"
+    exit 1
+fi
+
+# Use venv Python if available, otherwise use system Python
+if [ -f "$PYTHON" ]; then
+    exec "$PYTHON" main.py
+elif [ -f "/opt/homebrew/bin/python3" ]; then
+    exec /opt/homebrew/bin/python3 main.py
+else
+    exec python3 main.py
+fi
